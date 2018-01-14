@@ -4,21 +4,46 @@
  * @flow
  */
 
-import React, { Component } from "react"
-import { Platform, StyleSheet, Text, View } from "react-native"
+import React, { Component, Children } from "react"
+import { Platform, StyleSheet, Text, View, Image, Button, Alert } from "react-native"
+import head from "./images/head.gif"
+import octo from "./images/octo.gif"
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android: "Double tap R on your keyboard to reload,\n" + "Shake or press menu button for dev menu"
-})
+const getRandomInt = max => Math.floor(Math.random() * max)
+
+const chooseOneAtRandom = xs => xs[getRandomInt(xs.length)]
+
+const Random = ({ children }) => <View>{chooseOneAtRandom(Children.toArray(children))}</View>
+
+const clickResponses = ["Yeah!", "Alright!", "Whoo hoo!", "Sooo excited!!"]
 
 export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Random>
+          <Image
+            source={head}
+            style={{
+              width: 300,
+              height: 200
+            }}
+          />
+          <Image
+            source={octo}
+            style={{
+              width: 300,
+              height: 200
+            }}
+          />
+        </Random>
+        <Text style={{ marginTop: 20 }}>Coming soon!</Text>
+        <Button
+          title="Yay!"
+          onPress={() => {
+            Alert.alert(chooseOneAtRandom(clickResponses))
+          }}
+        />
       </View>
     )
   }
@@ -27,18 +52,9 @@ export default class App extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: "#fff",
     alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
+    justifyContent: "center",
+    padding: 10
   }
 })
