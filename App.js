@@ -5,7 +5,17 @@
  */
 
 import React, { Component, Children } from "react"
-import { Platform, StyleSheet, Text, View, Image, Button, Alert } from "react-native"
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Button,
+  Alert,
+  TouchableOpacity
+} from "react-native"
+
 import head from "./images/head.gif"
 import octo from "./images/octo.gif"
 
@@ -13,7 +23,31 @@ const getRandomInt = max => Math.floor(Math.random() * max)
 
 const chooseOneAtRandom = xs => xs[getRandomInt(xs.length)]
 
-const Random = ({ children }) => <View>{chooseOneAtRandom(Children.toArray(children))}</View>
+class Random extends React.PureComponent {
+  state = {
+    choice: 0
+  }
+
+  choose = () =>
+    this.setState({
+      choice: getRandomInt(Children.count(this.props.children))
+    })
+
+  chooseNext = () =>
+    this.setState(state => ({
+      choice: (state.choice + 1) % Children.count(this.props.children)
+    }))
+
+  componentDidMount = this.choose
+
+  render() {
+    return (
+      <TouchableOpacity onPress={this.chooseNext}>
+        {Children.toArray(this.props.children)[this.state.choice]}
+      </TouchableOpacity>
+    )
+  }
+}
 
 const clickResponses = ["Yeah!", "Alright!", "Whoo hoo!", "Sooo excited!!"]
 
